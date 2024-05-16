@@ -1,0 +1,6 @@
+@WhatsAppCloneServices_HostAddress = http://localhost:5292
+
+GET {{WhatsAppCloneServices_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

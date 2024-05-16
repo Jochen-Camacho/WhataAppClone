@@ -1,0 +1,113 @@
+﻿<UserControl x:Class="WhatsAppCloneMainProject.Controls.ChatContent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WhatsAppCloneMainProject.Controls" 
+             xmlns:temp="clr-namespace:WhatsAppCloneMainProject.Templates"
+             mc:Ignorable="d" 
+             x:Name="chatContent"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+
+        <DataTemplate x:Key="CurrentUserTemplate">
+            <Border HorizontalAlignment="Right" Padding="5 3" Background="#0E6A4E" CornerRadius="5" MinWidth="145" Margin="15 10">
+                <StackPanel  Margin="5">
+                    <TextBlock Text="{Binding Content}" Foreground="White" TextAlignment="Left" FontSize="15" Margin="0 0 60 0" MaxWidth="250" TextWrapping="Wrap"/>
+                    <TextBlock Text="{Binding TimeSent, StringFormat={}{0:hh:mm tt}}" 
+                               Foreground="White" Opacity="0.6" TextAlignment="Right" FontSize="11"
+                               Margin="0 -10 0 0"/>
+                </StackPanel>
+            </Border>
+
+        </DataTemplate>
+
+        <DataTemplate x:Key="OtherUserTemplate">
+            <Border HorizontalAlignment="Left" Padding="5 3" Background="#3C3C3C" CornerRadius="5" MinWidth="145" Margin="15 10">
+                <StackPanel  Margin="5">
+                    <TextBlock Text="{Binding Content}" Foreground="White" TextAlignment="Left" FontSize="15"  Margin="0 0 60 0" MaxWidth="250" TextWrapping="Wrap"/>
+                    <TextBlock Text="{Binding TimeSent, StringFormat={}{0:hh:mm tt}}" 
+            Foreground="White" Opacity="0.6" TextAlignment="Right" FontSize="11"
+            Margin="0 -10 0 0"/>
+                </StackPanel>
+            </Border>
+    
+        </DataTemplate>
+
+        <temp:ChatTemplateSelector x:Key="ChatTemplateSelector"
+                                CurrentUserTemplate="{StaticResource CurrentUserTemplate}"
+                                OtherUserTemplate="{StaticResource OtherUserTemplate}" />
+
+
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Padding="20" BorderThickness="0 0 0 1" BorderBrush="#222222">
+            <StackPanel Orientation="Horizontal" >
+                <Ellipse
+                                          Width="30"
+                                          Height="30"
+                                          Margin="2,0,0,0">
+                    <Ellipse.Fill>
+                        <ImageBrush ImageSource="/Assets/ChatImgs/person.fill@2x.png" />
+                    </Ellipse.Fill>
+                </Ellipse>
+                <StackPanel Margin="12,-3,0,0"  Width="auto" VerticalAlignment="Center">
+                    <Label Content="{Binding ContactName, ElementName=chatContent}" Foreground="White" FontSize="16" FontWeight="SemiBold"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Row="1" Padding="10" Background="#333333">
+            <ListView
+            
+            ItemsSource="{Binding Messages}" 
+            ItemTemplateSelector="{StaticResource ChatTemplateSelector}"
+            Background="#333333"
+            BorderThickness="0"
+            >
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Width" Value="auto"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                    </Style>
+                </ListView.ItemContainerStyle>
+
+            </ListView>
+        </Border>
+
+
+        <Border Grid.Row="2" BorderThickness="0 1 0 0" BorderBrush="#222222">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="60"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Background="{StaticResource emojiIcon}" Width="20" Height="20"  VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased"/>
+                <Border Background="{StaticResource clipIcon}" Grid.Column="1"  Width="20" Height="20"  VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased"/>
+
+                
+                <Border Grid.Column="2" Padding="5 15" >
+                    <TextBox FontSize="15" Background="#2C2C2C" BorderThickness="0" x:Name="txbChatBox"
+                             Text="Type a Message" Margin="10 -4 0 0" KeyDown="txbChatBox_KeyDown"
+                             Foreground="White" VerticalAlignment="Center"></TextBox>
+                </Border>
+
+                <Button Grid.Column="3" Background="Transparent" BorderBrush="Transparent" Click="btnSendMsg_Click"  x:Name="btnSendMsg">
+                    <Border Background="{StaticResource sendIcon}"  Width="23" Height="23"  VerticalAlignment="Center" RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased"/>
+                </Button>
+            </Grid>
+        </Border>
+   
+    </Grid>
+</UserControl>

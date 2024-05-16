@@ -1,0 +1,16 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <ImageBrush x:Key="clipIcon" 
+                Stretch="Uniform"
+                ImageSource="/Assets/ChatImgs/clipIc.png"/>
+
+    <ImageBrush x:Key="sendIcon" 
+                Stretch="Uniform"
+                ImageSource="/Assets/ChatImgs/sendIc.png"/>
+
+    <ImageBrush x:Key="emojiIcon" 
+                Stretch="Uniform"
+                ImageSource="/Assets/ChatImgs/emojiIc.png"/>
+
+</ResourceDictionary>

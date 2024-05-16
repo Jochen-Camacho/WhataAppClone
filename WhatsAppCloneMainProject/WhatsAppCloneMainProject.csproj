@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -55,7 +58,43 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="MainWindow.xaml">
+    <Compile Include="Controls\ChatContent.xaml.cs">
+      <DependentUpon>ChatContent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="DTOs\ChatDtop.cs" />
+    <Compile Include="DTOs\LoginDto.cs" />
+    <Compile Include="Models\ApiResponse.cs" />
+    <Compile Include="Models\Message.cs" />
+    <Compile Include="Models\CurrentUser.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Pages\HomePage.xaml.cs">
+      <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Services\DataService.cs" />
+    <Compile Include="Services\ServiceLocator.cs" />
+    <Compile Include="Templates\ChatTemplateSelector.cs" />
+    <Compile Include="ViewModels\ChatContentViewModel.cs" />
+    <Compile Include="ViewModels\ChatViewModel.cs" />
+    <Page Include="Controls\ChatContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\NavItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\HomePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\LoginPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -63,12 +102,31 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Controls\NavItem.xaml.cs">
+      <DependentUpon>NavItem.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Pages\Chats.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\Images.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\NavBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Contact.cs" />
+    <Compile Include="Pages\Chats.xaml.cs">
+      <DependentUpon>Chats.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -86,6 +144,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -94,5 +153,25 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\NavIcons\chatsIc.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\NavIcons\menuIc.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\ChatImgs\person.fill%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\ChatImgs\clipIc.png" />
+    <Resource Include="Assets\ChatImgs\emojiIc.png" />
+    <Resource Include="Assets\ChatImgs\sendIc.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\NavIcons\phoneIc.png" />
+    <Resource Include="Assets\NavIcons\settingsIc.png" />
+    <Resource Include="Assets\NavIcons\statusIc.png" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using WhatsAppCloneMainProject.Services;
 
 namespace WhatsAppCloneMainProject
 {
@@ -13,5 +14,12 @@ namespace WhatsAppCloneMainProject
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            ServiceLocator.Register(new DataService());
+
+        }
     }
 }
