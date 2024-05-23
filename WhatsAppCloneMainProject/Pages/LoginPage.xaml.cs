@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using WhatsAppCloneMainProject.DTOs;
 using WhatsAppCloneMainProject.Models;
 using WhatsAppCloneMainProject.Services;
+using WhatsAppCloneMainProject.ViewModels;
 
 namespace WhatsAppCloneMainProject.Pages
 {
@@ -25,14 +26,16 @@ namespace WhatsAppCloneMainProject.Pages
     public partial class LoginPage : Page
     {
         private readonly DataService dataService;
+        private readonly LoginPageViewModel loginPageViewModel = new LoginPageViewModel();
         public LoginPage()
         {
             InitializeComponent();
             dataService = ServiceLocator.Get<DataService>();
-            autoLogin();
+            this.DataContext = loginPageViewModel;
+            //AutoLogin();
         }
 
-        private async void autoLogin()
+        private void AutoLogin()
         {
             var loginDto = new LoginDto
             {
@@ -40,27 +43,17 @@ namespace WhatsAppCloneMainProject.Pages
                 Password = "securePassword123!",
             };
 
-            try
-            {
-                var data = await dataService.LoginUserAsync(loginDto);
+            //var loginDto = new LoginDto
+            //{
+            //    Username = "newUser0",
+            //    Password = "securePassword0!",
+            //};
 
-                CurrentUser.Instance.User = new User
-                {
-                    Id = data.UserId,
-                    Username = data.UserName,
-                };
-
-                var mainWindow = Application.Current.MainWindow as MainWindow;
-                mainWindow?.NavigateToPage(new Uri("/Pages/HomePage.xaml", UriKind.Relative));
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Login failed: {ex.Message}");
-            }
+            loginPageViewModel.LoginUser(loginDto);
+        
         }
 
-        private async void btnLogin_Click(object sender, RoutedEventArgs e)
+        private void btnLogin_Click(object sender, RoutedEventArgs e)
         {
             var loginDto = new LoginDto
             {
@@ -68,25 +61,13 @@ namespace WhatsAppCloneMainProject.Pages
                 Password = txbPassword.Text,
             };
 
-            try
-            {
-                var data = await dataService.LoginUserAsync(loginDto);
-                MessageBox.Show(data.Message);
+            loginPageViewModel.LoginUser(loginDto);
+        }
 
-                CurrentUser.Instance.User = new User
-                {
-                    Id = data.UserId,
-                    Username = data.UserName,
-                };
-
-                var mainWindow = Application.Current.MainWindow as MainWindow;
-                mainWindow.NavigateToPage(new Uri("/Pages/HomePage.xaml", UriKind.Relative));
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Login failed: {ex.Message}");
-            }
+        private void BtnToRegister_Click(object sender, RoutedEventArgs e)
+        {
+            var window = Application.Current.MainWindow as MainWindow;
+            window?.NavigateToPage(new Uri("/Pages/RegisterPage.xaml", UriKind.Relative));
         }
     }
 }

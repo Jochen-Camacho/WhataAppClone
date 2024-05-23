@@ -12,8 +12,8 @@ using WhatsAppCloneServices.Data;
 namespace WhatsAppCloneServices.Migrations
 {
     [DbContext(typeof(WhatsAppCF))]
-    [Migration("20240516023311_InitialMig")]
-    partial class InitialMig
+    [Migration("20240522212458_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -91,13 +91,13 @@ namespace WhatsAppCloneServices.Migrations
                     b.Property<string>("ClaimValue")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SenderId")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SenderId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("AspNetUserClaims", (string)null);
                 });
@@ -113,26 +113,26 @@ namespace WhatsAppCloneServices.Migrations
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SenderId")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("LoginProvider", "ProviderKey");
 
-                    b.HasIndex("SenderId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("AspNetUserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.Property<string>("SenderId")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("RoleId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("SenderId", "RoleId");
+                    b.HasKey("UserId", "RoleId");
 
                     b.HasIndex("RoleId");
 
@@ -141,7 +141,7 @@ namespace WhatsAppCloneServices.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.Property<string>("SenderId")
+                    b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
@@ -153,7 +153,7 @@ namespace WhatsAppCloneServices.Migrations
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("SenderId", "LoginProvider", "Name");
+                    b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
@@ -170,7 +170,10 @@ namespace WhatsAppCloneServices.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("SenderId")
+                    b.Property<DateTime>("DateAdded")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -178,7 +181,7 @@ namespace WhatsAppCloneServices.Migrations
 
                     b.HasIndex("ContactUserId");
 
-                    b.HasIndex("SenderId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Contacts");
                 });
@@ -215,7 +218,7 @@ namespace WhatsAppCloneServices.Migrations
                     b.ToTable("Messages");
                 });
 
-            modelBuilder.Entity("WhatsAppCloneServices.Models.Sender", b =>
+            modelBuilder.Entity("WhatsAppCloneServices.Models.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -226,6 +229,9 @@ namespace WhatsAppCloneServices.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -256,6 +262,9 @@ namespace WhatsAppCloneServices.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<byte[]>("ProfileImage")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -291,18 +300,18 @@ namespace WhatsAppCloneServices.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("WhatsAppCloneServices.Models.Sender", null)
+                    b.HasOne("WhatsAppCloneServices.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("SenderId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("WhatsAppCloneServices.Models.Sender", null)
+                    b.HasOne("WhatsAppCloneServices.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("SenderId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -315,50 +324,50 @@ namespace WhatsAppCloneServices.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("WhatsAppCloneServices.Models.Sender", null)
+                    b.HasOne("WhatsAppCloneServices.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("SenderId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("WhatsAppCloneServices.Models.Sender", null)
+                    b.HasOne("WhatsAppCloneServices.Models.User", null)
                         .WithMany()
-                        .HasForeignKey("SenderId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("WhatsAppCloneServices.Models.Contact", b =>
                 {
-                    b.HasOne("WhatsAppCloneServices.Models.Sender", "ContactUser")
+                    b.HasOne("WhatsAppCloneServices.Models.User", "ContactUser")
                         .WithMany()
                         .HasForeignKey("ContactUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WhatsAppCloneServices.Models.Sender", "Sender")
+                    b.HasOne("WhatsAppCloneServices.Models.User", "User")
                         .WithMany("Contacts")
-                        .HasForeignKey("SenderId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("ContactUser");
 
-                    b.Navigation("Sender");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("WhatsAppCloneServices.Models.Message", b =>
                 {
-                    b.HasOne("WhatsAppCloneServices.Models.Sender", "Recipient")
+                    b.HasOne("WhatsAppCloneServices.Models.User", "Recipient")
                         .WithMany("ReceivedMessages")
                         .HasForeignKey("RecipientUserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("WhatsAppCloneServices.Models.Sender", "Sender")
+                    b.HasOne("WhatsAppCloneServices.Models.User", "Sender")
                         .WithMany("SentMessages")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -369,7 +378,7 @@ namespace WhatsAppCloneServices.Migrations
                     b.Navigation("Sender");
                 });
 
-            modelBuilder.Entity("WhatsAppCloneServices.Models.Sender", b =>
+            modelBuilder.Entity("WhatsAppCloneServices.Models.User", b =>
                 {
                     b.Navigation("Contacts");
 

@@ -63,7 +63,8 @@ namespace WhatsAppCloneServices.Controllers
                 User = currentUser,
                 UserId = userId,
                 ContactUserId = contactUser.Id,
-                ContactUser = contactUser
+                ContactUser = contactUser,
+                DateAdded = DateTime.UtcNow,
             };
 
             currentUser.Contacts.Add(contact);
@@ -90,17 +91,45 @@ namespace WhatsAppCloneServices.Controllers
                 return NotFound("Sender not found.");
             }
 
-            var contacts = await whatsAppCF.Contacts
+            var userContacts = await whatsAppCF.Contacts
                 .Where(c => c.UserId == userId)
-                .Select(c => new Contact
+                .Select(c => new
                 {
-                    ContactId = c.ContactId,
-                    User = c.User,
-                    UserId = c.UserId,
-                    ContactUser = c.ContactUser,
-                    ContactUserId=c.ContactUserId,
+                    c.ContactId,
+                    c.UserId,
+                    c.ContactUserId,
+                    ContactUser = new
+                    {
+                        c.ContactUser.Id,
+                        c.ContactUser.UserName,
+                        c.ContactUser.Email,
+                        c.ContactUser.DateCreated,
+                        c.ContactUser.ProfileImage
+                    },
+                    c.DateAdded
                 })
                 .ToListAsync();
+
+            var unknownContacts = await whatsAppCF.Contacts
+                .Where(c => c.ContactUserId == userId)
+                .Select(c => new
+                {
+                    c.ContactId,
+                    c.UserId,
+                    c.ContactUserId,
+                    ContactUser = new
+                    {
+                        c.User.Id,
+                        c.User.UserName,
+                        c.User.Email,
+                        c.User.DateCreated,
+                        c.User.ProfileImage
+                    },
+                    c.DateAdded
+                })
+                .ToListAsync();
+
+            var contacts = new List<object> { userContacts, unknownContacts };
 
             return Ok(contacts);
         }

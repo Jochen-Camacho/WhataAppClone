@@ -26,11 +26,44 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0,0,0">
-                <Image Width="20" Height="20" Margin="0,0,10,0"/>
+                <Image Width="20" Height="20" Margin="0,0,10,0" Source="/Assets/WindowIcons/logoIc.png" RenderOptions.BitmapScalingMode="HighQuality" RenderOptions.EdgeMode="Aliased"/>
                 <TextBlock Text="WhatsApp" Foreground="White" VerticalAlignment="Center" FontSize="14" Margin="0 -3 0 0"/>
             </StackPanel>
 
-            <Button Content="X" Width="30" Height="30" Click="CloseButton_Click" Background="Transparent" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <StackPanel Orientation="Horizontal"  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0">
+
+                <Button Width="25" Height="30" Click="MinimizeButton_Click" Background="Transparent" Foreground="White" Cursor="Hand" Margin="0 0 10 0">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Grid>
+                                <Image Source="/Assets/WindowIcons/miniIc.png" Stretch="Uniform"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <Button Width="20" Height="30" Click="MaximizeButton_Click" Background="Transparent" Foreground="White" Cursor="Hand" Margin="0 0 10 0">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Grid>
+                                <Image Source="/Assets/WindowIcons/maxiIc.png" Stretch="Uniform"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+                
+                <Button Width="20" Height="30" Click="CloseButton_Click" Background="Transparent" Foreground="White" Cursor="Hand">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Grid>
+                                <Image Source="/Assets/WindowIcons/closeIc.png" Stretch="Uniform"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+            </StackPanel>
+       
         </Grid>
 
         <Grid Background="#222222" Grid.Row="1">

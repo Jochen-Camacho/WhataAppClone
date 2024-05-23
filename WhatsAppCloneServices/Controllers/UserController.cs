@@ -5,6 +5,7 @@ using WhatsAppCloneServices.Data.DTOs;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
+using WhatsAppCloneServices.Data;
 
 namespace WhatsAppCloneServices.Controllers
 {
@@ -15,12 +16,14 @@ namespace WhatsAppCloneServices.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<UserController> _logger;
+        private WhatsAppCF whatsAppCF;
 
-        public UserController(UserManager<User> userManager, SignInManager<User> signInManager, ILogger<UserController> logger)
+        public UserController(UserManager<User> userManager, SignInManager<User> signInManager, ILogger<UserController> logger, WhatsAppCF whatsAppCF)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            this.whatsAppCF = whatsAppCF;
         }
 
         [HttpPost("register")]
@@ -40,6 +43,8 @@ namespace WhatsAppCloneServices.Controllers
                     SentMessages = new List<Message>(),
                     ReceivedMessages = new List<Message>(),
                     Contacts = new List<Contact>(),
+                    ProfileImage = model.ProfileImage,
+                    DateCreated = DateTime.Now,
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
@@ -96,7 +101,7 @@ namespace WhatsAppCloneServices.Controllers
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
                     _logger.LogInformation("Sender {Username} Logged In successfully.", model.Username);
-                    return Ok(new { message = "Login successful", userId = user.Id, userName = user.UserName });
+                    return Ok(new { message = "Login successful", userId = user.Id, userName = user.UserName, userImage = user.ProfileImage });
                 }
 
                 return BadRequest(new { message = "Invalid login attempt" });
@@ -106,8 +111,36 @@ namespace WhatsAppCloneServices.Controllers
                 _logger.LogError(ex, "An error occurred when trying to register {Username}.", model.Username);
                 return StatusCode(500, "An Error Occured Please Try Again");
             }
+        }
 
+        [HttpPost("upload_image")]
+        public async Task<IActionResult> UploadImage([FromBody] byte[] image)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            if (image == null || image.Length == 0)
+            {
+                return BadRequest("No image uploaded.");
+            }
+
+            var user = whatsAppCF.Users.FirstOrDefault(u => u.Id == userId);
+
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            try
+            {
+                user.ProfileImage = image;
+                await whatsAppCF.SaveChangesAsync();
+                return Ok("Image uploaded successfully.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred when trying to upload an image for {Username}.", user.UserName);
+                return StatusCode(500, "An error occurred. Please try again.");
+            }
         }
     }
 }

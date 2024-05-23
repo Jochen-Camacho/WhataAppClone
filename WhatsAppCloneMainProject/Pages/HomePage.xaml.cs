@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WhatsAppCloneMainProject.Controls;
 using WhatsAppCloneMainProject.Services;
+using WhatsAppCloneMainProject.ViewModels;
 
 namespace WhatsAppCloneMainProject.Pages
 {
@@ -25,17 +27,15 @@ namespace WhatsAppCloneMainProject.Pages
     {
         private bool isNavShown = false;
         private NavItem selectedItem = new NavItem();
-        private readonly DataService dataService;
+        public HomePageViewModel homePageView { get; set; } = new HomePageViewModel();
 
         public HomePage()
         {
             InitializeComponent();
-            dataService = ServiceLocator.Get<DataService>();
-            contentFrame.Navigate(new Uri("/Pages/Chats.xaml", UriKind.Relative));
+            this.DataContext = homePageView;
+            ServiceLocator.Register<HomePageViewModel>(homePageView);
+            contentFrame.Navigate(new Chats(homePageView.Contacts, homePageView.UnAddedContacts));
         }
-
-
-
 
         private void ucMenuIc_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -57,6 +57,7 @@ namespace WhatsAppCloneMainProject.Pages
                 }
 
                 var newColor = (Color)ColorConverter.ConvertFromString("#313131");
+
 
                 ColorAnimation navColorChange = new ColorAnimation
                 {
@@ -111,7 +112,15 @@ namespace WhatsAppCloneMainProject.Pages
 
         private void ucChatsBtn_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            contentFrame.Navigate(new Uri("/Pages/Chats.xaml", UriKind.Relative));
+            contentFrame.Navigate(new Chats(homePageView.Contacts, homePageView.UnAddedContacts));
+            if (selectedItem != null) removePrevSelected();
+            selectedItem = sender as NavItem;
+            updateSelectedIcon(selectedItem);
+        }
+
+        private void ucContactBtn_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            contentFrame.Navigate(new Contacts(homePageView.Contacts, homePageView.UnAddedContacts));
             if (selectedItem != null) removePrevSelected();
             selectedItem = sender as NavItem;
             updateSelectedIcon(selectedItem);
@@ -119,7 +128,8 @@ namespace WhatsAppCloneMainProject.Pages
 
         private void updateSelectedIcon(NavItem item)
         {
-            item.BorderBrush = new SolidColorBrush(Colors.LightGreen);
+            var newColor = (Color)ColorConverter.ConvertFromString("#0E6A4E");
+            item.BorderBrush = new SolidColorBrush(newColor);
         }
 
         private void removePrevSelected()
@@ -132,7 +142,7 @@ namespace WhatsAppCloneMainProject.Pages
             DoubleAnimation settingsOpen = new DoubleAnimation
             {
                 From = 0,
-                To = 200,
+                To = 270,
                 Duration = TimeSpan.FromSeconds(0.2)
             };
 
@@ -143,7 +153,7 @@ namespace WhatsAppCloneMainProject.Pages
         {
             DoubleAnimation settingsClose = new DoubleAnimation
             {
-                From = 200,
+                From = 270,
                 To = 0,
                 Duration = TimeSpan.FromSeconds(0.2)
             };
@@ -155,6 +165,58 @@ namespace WhatsAppCloneMainProject.Pages
         {
            var mainwin = Application.Current.MainWindow as MainWindow;
            mainwin.NavigateToPage(new Uri("/Pages/LoginPage.xaml", UriKind.Relative));
+        }
+
+        private void BtnChangeUserImage_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "JPEG Files (*.jpeg;*.jpg)|*.jpeg;*.jpg",
+                Title = "Select a JPEG Image"
+            };
+
+
+            bool? result = openFileDialog.ShowDialog();
+
+
+            if (result == true)
+            {
+
+                string imagePath = openFileDialog.FileName;
+                homePageView.PerformUploadUserImage(imagePath);
+            }
+        }
+
+        private void btnSettingClose_MouseEnter(object sender, MouseEventArgs e)
+        {
+            Border border = sender as Border;
+            border.Background = new SolidColorBrush(Colors.Gray);
+        }
+
+        private void btnSettingClose_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Border border = sender as Border;
+            border.Background = new SolidColorBrush(Colors.Transparent);
+        }
+
+        private void btnLogout_MouseEnter(object sender, MouseEventArgs e)
+        {
+            brdLogout.BorderBrush = new SolidColorBrush(Colors.White);
+        }
+
+        private void btnLogout_MouseLeave(object sender, MouseEventArgs e)
+        {
+            brdLogout.BorderBrush = new SolidColorBrush(Colors.Transparent);
+        }
+
+        private void brdChangeImage_MouseLeave(object sender, MouseEventArgs e)
+        {
+            brdChangeImage.BorderBrush = new SolidColorBrush(Colors.Transparent);
+        }
+
+        private void brdChangeImage_MouseEnter(object sender, MouseEventArgs e)
+        {
+            brdChangeImage.BorderBrush = new SolidColorBrush(Colors.White);
         }
     }
 }

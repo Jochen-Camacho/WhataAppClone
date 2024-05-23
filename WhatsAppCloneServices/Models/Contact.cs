@@ -1,4 +1,6 @@
-﻿namespace WhatsAppCloneServices.Models
+﻿using System.Data;
+
+namespace WhatsAppCloneServices.Models
 {
     public class Contact
     {
@@ -6,6 +8,7 @@
         public required string UserId { get; set; }  
         public required virtual User User { get; set; } 
         public required string ContactUserId { get; set; } 
-        public required virtual User ContactUser { get; set; } 
+        public required virtual User ContactUser { get; set; }
+        public DateTime DateAdded { get; set; } 
     }
 }

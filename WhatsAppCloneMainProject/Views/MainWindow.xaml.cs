@@ -26,8 +26,6 @@ namespace WhatsAppCloneMainProject
     public partial class MainWindow : Window
     {
 
-        private readonly DataService dataService = new DataService();
-
         public MainWindow()
         {
             InitializeComponent();
@@ -46,21 +44,6 @@ namespace WhatsAppCloneMainProject
             }
         }
 
-        private async void PerformLoginAsync()
-        {
-            var check = new LoginDto { Password = "securePassword123!", Username = "newUser123" };
-
-            try
-            {
-                var data = await dataService.LoginUserAsync(check);
-                MessageBox.Show(data.Message);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Login failed: {ex.Message}");
-            }
-        }
-
         private void GrdTitleBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             this.DragMove();
@@ -70,5 +53,25 @@ namespace WhatsAppCloneMainProject
         {
             this.Close();
         }
+
+
+        private void MaximizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.WindowState == WindowState.Maximized)
+            {
+                this.WindowState = WindowState.Normal;
+            }
+            else
+            {
+                this.WindowState = WindowState.Maximized;
+            }
+        }
+
+
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.WindowState = WindowState.Minimized;
+        }
+
     }
 }

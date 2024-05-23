@@ -58,31 +58,60 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\AddContact.xaml.cs">
+      <DependentUpon>AddContact.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ChatContent.xaml.cs">
       <DependentUpon>ChatContent.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ContactContent.xaml.cs">
+      <DependentUpon>ContactContent.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DTOs\ChatDtop.cs" />
+    <Compile Include="DTOs\ContactDto.cs" />
     <Compile Include="DTOs\LoginDto.cs" />
+    <Compile Include="DTOs\MessageDto.cs" />
+    <Compile Include="DTOs\RegisterDto.cs" />
     <Compile Include="Models\ApiResponse.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\CurrentUser.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Pages\Contacts.xaml.cs">
+      <DependentUpon>Contacts.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\HomePage.xaml.cs">
       <DependentUpon>HomePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\RegisterPage.xaml.cs">
+      <DependentUpon>RegisterPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services\DataService.cs" />
     <Compile Include="Services\ServiceLocator.cs" />
     <Compile Include="Templates\ChatTemplateSelector.cs" />
+    <Compile Include="Utility\ImageUtil.cs" />
+    <Compile Include="ViewModels\AddContactViewModel.cs" />
     <Compile Include="ViewModels\ChatContentViewModel.cs" />
     <Compile Include="ViewModels\ChatViewModel.cs" />
+    <Page Include="Controls\AddContact.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ChatContent.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ContactContent.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\NavItem.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Contacts.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -91,6 +120,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\LoginPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\RegisterPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -105,6 +138,11 @@
     <Compile Include="Controls\NavItem.xaml.cs">
       <DependentUpon>NavItem.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\ContactContentViewModel.cs" />
+    <Compile Include="ViewModels\ContactsViewModel.cs" />
+    <Compile Include="ViewModels\HomePageViewModel.cs" />
+    <Compile Include="ViewModels\LoginPageViewModel.cs" />
+    <Compile Include="ViewModels\RegisterPageViewModel.cs" />
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -172,6 +210,19 @@
     <Resource Include="Assets\NavIcons\settingsIc.png" />
     <Resource Include="Assets\NavIcons\statusIc.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Assets\WindowIcons\closeIc.png" />
+    <Resource Include="Assets\WindowIcons\maxiIc.png" />
+    <Resource Include="Assets\WindowIcons\miniIc.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Placeholders\placeholderImage.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Background\background.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\WindowIcons\logoIc.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -7,6 +7,8 @@ namespace WhatsAppCloneServices.Models
         public required virtual List<Message> SentMessages { get; set; }
         public required virtual List<Message> ReceivedMessages { get; set; }
         public required virtual List<Contact> Contacts { get; set; }
+        public DateTime DateCreated { get; set; }
+        public byte[]? ProfileImage { get; set; }
 
         public User() {
             SentMessages = new List<Message>();

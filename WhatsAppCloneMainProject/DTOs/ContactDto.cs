@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace WhatsAppCloneMainProject.DTOs
 {
-    public class ChatDto
+    public class ContactDto
     {
-        public  string RecipientId { get; set; }
-        public DateTime? LastTimeStamp { get; set; }
+        public string Username { get; set; }
+
+        public string Email { get; set; }
     }
 }

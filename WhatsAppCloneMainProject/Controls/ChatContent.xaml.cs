@@ -16,6 +16,8 @@ using System.Windows.Shapes;
 using WhatsAppCloneMainProject.Models;
 using WhatsAppCloneMainProject.ViewModels;
 using WhatsAppCloneMainProject.Services;
+using System.Collections.Specialized;
+using System.Runtime.Remoting.Messaging;
 
 namespace WhatsAppCloneMainProject.Controls
 {
@@ -30,44 +32,36 @@ namespace WhatsAppCloneMainProject.Controls
         public ChatContent(Contact contact)
         {
             InitializeComponent();
+
             dataService = ServiceLocator.Get<DataService>();
-            //ChatContentViewModel.Messages = new ObservableCollection<Message>(contact.ContactUser.Messages);
             this.DataContext = ChatContentViewModel;
+
             ChatContentViewModel.Initialize(txbChatBox);
             ContactName = contact.ContactUser.Username;
             ChatContentViewModel.User = contact.ContactUser;
-            PerformGetUserMessages();
-
+            ChatContentViewModel.GetUserMessages();
+            var messages = DataContext as ChatContentViewModel;
+            if (messages != null)
+            {
+                ((INotifyCollectionChanged)messages.Messages).CollectionChanged += Messages_CollectionChanged;
+            }
         }
 
-        private async void PerformGetUserMessages()
+        private void Messages_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            try
+            if (e.Action == NotifyCollectionChangedAction.Add)
             {
-                if (CurrentUser.Instance?.User?.Id == null)
+                var listView = LvMesgs;
+                if (listView.Items.Count > 0)
                 {
-                    MessageBox.Show("Current user ID is not set.");
-                    return;
+                    // Use Dispatcher to ensure it runs on the UI thread
+                    listView.Dispatcher.BeginInvoke((Action)(() =>
+                    {
+                        listView.ScrollIntoView(listView.Items[listView.Items.Count - 1]);
+                    }));
                 }
-
-                if (ChatContentViewModel?.User?.Id == null)
-                {
-                    MessageBox.Show("Chat user ID is not set.");
-                    return;
-                }
-
-                var data = await dataService.GetUserMessages(ChatContentViewModel.User.Id);
-                foreach (var message in data)
-                {
-                    ChatContentViewModel.Messages.Add(message);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to get user messages: {ex.Message}");
             }
         }
-
 
         public string ContactName
         {
@@ -89,6 +83,7 @@ namespace WhatsAppCloneMainProject.Controls
         private void btnSendMsg_Click(object sender, RoutedEventArgs e)
         {
             if (!string.IsNullOrEmpty(ChatContentViewModel.ChatBox.Text.Trim())) ChatContentViewModel.SendMessage();
+  
         }
     }
 }

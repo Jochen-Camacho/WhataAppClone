@@ -94,22 +94,31 @@ namespace WhatsAppCloneServices.Controllers
                 return NotFound(new { message = "Recipient not found." });
             }
 
-            var messages = await whatsAppCF.Messages.
-                Where(m => (m.SenderId == user.Id && m.RecipientUserId == recipient.Id) || (m.SenderId == recipient.Id && m.RecipientUserId == user.Id))
+            IQueryable<Message> query = whatsAppCF.Messages.Where(m =>
+                (m.SenderId == user.Id && m.RecipientUserId == recipient.Id) ||
+                (m.SenderId == recipient.Id && m.RecipientUserId == user.Id));
+
+            if (model.LastTimeStamp.HasValue)
+            {
+                query = query.Where(m => m.Timestamp > model.LastTimeStamp.Value);
+            }
+
+            var messages = await query
                 .OrderBy(m => m.Timestamp)
-                .Select(c => new Message
+                .Select(m => new Message
                 {
-                    MessageId = c.MessageId,
-                    SenderId = c.SenderId,
-                    Sender = c.Sender,
-                    Content = c.Content,
-                    Recipient = c.Recipient,
-                    RecipientUserId = c.RecipientUserId,
-                    Timestamp = c.Timestamp,
+                    MessageId = m.MessageId,
+                    SenderId = m.SenderId,
+                    Sender = m.Sender,
+                    Content = m.Content,
+                    Recipient = m.Recipient,
+                    RecipientUserId = m.RecipientUserId,
+                    Timestamp = m.Timestamp,
                 })
                 .ToListAsync();
 
             return Ok(messages);
+
         }
     }
 }
